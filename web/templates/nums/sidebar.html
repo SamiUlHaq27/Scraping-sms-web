@@ -1,0 +1,19 @@
+<div class="col-lg-3">
+    <ul class="sidenav">
+        {% for country in three_countries %}
+            <li title="Basic Startup" class="sidelist parent">
+                <a href={% url "numbers" country.slug_id %}>{{country.name}}</a>
+                <ul>
+                    <li class="sidelist">
+                    <a href="single.html">Installation</a>
+                    <li class="sidelist">
+                    <a href="single.html">Configuration</a>
+                    <li class="sidelist">
+                    <a href="single.html">Customization</a>
+                    <li class="sidelist">
+                    <a href="single.html">Requerments</a>
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
