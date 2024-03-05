@@ -1,19 +1,28 @@
 <div class="col-lg-3">
     <ul class="sidenav">
-        {% for country in three_countries %}
             <li title="Basic Startup" class="sidelist parent">
-                <a href={% url "numbers" country.slug_id %}>{{country.name}}</a>
+                <a href={% url "numbers" usa_cnt.slug_id %}>{{usa_cnt.name}}</a>
                 <ul>
-                    <li class="sidelist">
-                    <a href="single.html">Installation</a>
-                    <li class="sidelist">
-                    <a href="single.html">Configuration</a>
-                    <li class="sidelist">
-                    <a href="single.html">Customization</a>
-                    <li class="sidelist">
-                    <a href="single.html">Requerments</a>
+                    {% for num in usa_num %}
+                        <li class="sidelist"><a href={% url "messages" usa_cnt.slug_id num.slug_id %}>{{num.number}}</a></li>
+                    {% endfor %}
                 </ul>
             </li>
-        {% endfor %}
+            <li title="Basic Startup" class="sidelist parent">
+                <a href={% url "numbers" uk_cnt.slug_id %}>{{uk_cnt.name}}</a>
+                <ul>
+                    {% for num in uk_num %}
+                        <li class="sidelist"><a href={% url "messages" uk_cnt.slug_id num.slug_id %}>{{num.number}}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li title="Basic Startup" class="sidelist parent">
+                <a href={% url "numbers" frn_cnt.slug_id %}>{{frn_cnt.name}}</a>
+                <ul>
+                    {% for num in frn_num %}
+                        <li class="sidelist"><a href={% url "messages" frn_cnt.slug_id num.slug_id %}>{{num.number}}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
     </ul>
 </div>

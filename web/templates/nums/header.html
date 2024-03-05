@@ -1,0 +1,17 @@
+<header class="sticky-top navigation">
+    <div class=container>
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+        <a class="navbar-brand" href={% url "home" %}><h3 style="font-size: 20px;">Temporay-Sms-Number.xyz</h3></a>
+        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+          <i class="ti-align-right h4 text-dark"></i></button>
+        <div class="collapse navbar-collapse text-center" id=navigation>
+          <ul class="navbar-nav mx-auto align-items-center">
+            <li class="nav-item"><a class="nav-link" href={% url "home" %}>Home</a></li>
+            <li class="nav-item"><a class="nav-link" href={% url "numbers" "United-States" %}>USA</a></li>
+            <li class="nav-item"><a class="nav-link" href={% url "numbers" "United-Kingdom" %}>UK</a></li>
+            <li class="nav-item"><a class="nav-link" href={% url "about" %}>About Us</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>

@@ -1,7 +1,13 @@
 from django.shortcuts import render
-from .models import Countries, Numbers, Country, Number, Messages, Message
+from .models import Country, Number, Message
+from .handlers import Countries, Numbers, Messages
 import random
 from django.core import paginator
+from .sides import get_pages
+import json
+
+
+
 
 def index(request):
     content = {}
@@ -13,6 +19,7 @@ def index(request):
     return response
 
 def countries(request):
+    # Countries.update()
     content = {}
     #-------------------------------------------------------
     content["countries"] = Country.objects.all()
@@ -23,24 +30,29 @@ def countries(request):
 def numbers(request, country):
     content = {}
     #-------------------------------------------------------
-    content["country"] = Country.objects.filter(slug_id=country)[0]
+    print(country)
+    content["country"] = Country.objects.get(slug_id=country)
+    print(content["country"])
+    Numbers.update(content["country"])
     #-------------------------------------------------------
-    content["three_countries"] = random.sample(list(Country.objects.all()), 3)
-    # content["numbers"] = []
-    # for country in content["three_countries"]:
-    #     content["numbers"].append(random.sample(list(Number.objects.filter(country=country.name)), 4))
+    content["usa_cnt"] = Country.objects.filter(name="United States")[0]
+    content["usa_num"] = Number.objects.filter(country="United States")[:3]
+    content["uk_cnt"] = Country.objects.filter(name="United Kingdom")[0]
+    content["uk_num"] = Number.objects.filter(country="United Kingdom")[:3]
+    content["frn_cnt"] = Country.objects.filter(name="France")[0]
+    content["frn_num"] = Number.objects.filter(country="France")[:3]
     #-------------------------------------------------------
     try:
         content["pageNo"] = int(request.GET.get('page-no'))
     except:
         content["pageNo"] = 1
-    pagination = paginator.Paginator(Number.objects.filter(country=content["country"].name), 10)
+    numbers = list(Number.objects.filter(country=content["country"].name))
+    pagination = paginator.Paginator(numbers, 10)
     content["numbers"] = pagination.get_page(content["pageNo"])
     content["last_page_no"] = pagination.num_pages
     content["pages"] = get_pages(content["numbers"], content["pageNo"], content["last_page_no"])
     #-------------------------------------------------------
-    response = render(request, 'nums/numbers.html', content)
-    return response
+    return render(request, 'nums/numbers.html', content)
 
 def messages(request, country, number):
     content = {}
@@ -55,34 +67,21 @@ def messages(request, country, number):
         content["pageNo"] = int(request.GET.get('page-no'))
     except:
         content["pageNo"] = 1
-    pagination = paginator.Paginator(Message.objects.filter(number=number.number), 20)
+    messages = list(Message.objects.filter(number=number.number))
+    pagination = paginator.Paginator(messages, 20)
     content["messages"] = pagination.get_page(content["pageNo"])
     content["last_page_no"] = pagination.num_pages
     content["pages"] = get_pages(content["messages"], content["pageNo"], content["last_page_no"])
     #-------------------------------------------------------
+    content["usa_cnt"] = Country.objects.filter(name="United States")[0]
+    content["usa_num"] = Number.objects.filter(country="United States")[:3]
+    content["uk_cnt"] = Country.objects.filter(name="United Kingdom")[0]
+    content["uk_num"] = Number.objects.filter(country="United Kingdom")[:3]
+    content["frn_cnt"] = Country.objects.filter(name="France")[0]
+    content["frn_num"] = Number.objects.filter(country="France")[:3]
+    #-------------------------------------------------------
     response = render(request, 'nums/messages.html', content)
     return response
 
-def get_pages(page:paginator.Paginator, current_page, last_page):
-    pages = [current_page]
-    
-    if page.has_next():
-        pages.append(page.next_page_number())
-        if current_page+2 <= last_page:
-            pages.append(current_page+2)
-
-
-    if page.has_previous():
-        pages.insert(0, page.previous_page_number())
-        if current_page-2 > 0:
-            pages.insert(0, current_page-2)
-
-            
-    # if page.has_previous():
-    #     pages.insert(0, page.previous_page_number())
-    # else:
-    #     next_page_no = page.next_page_number()
-    #     if next_page_no+2 <= last_page:
-    #         pages.append(next_page_no+2)
-            
-    return pages
+def about(request):
+    return render(request, "about.html")

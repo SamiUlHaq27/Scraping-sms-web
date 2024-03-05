@@ -1,31 +1,14 @@
-from .browser import Browser
 from bs4 import BeautifulSoup
+import requests
 
-    
-path = __file__.replace("crawler.py","")
 
 def get(url):
     try:
-        brw = Browser()
-        html = brw.get(url)
-        brw.close()
+        response = requests.get("http://127.0.0.1:9000/?url="+url)
+        return response.text
     except Exception as e:
         print(e)
-        html = "empty"
-    return html
-
-def write(filename, html):
-    with open(path+f"pages/{filename}.html", 'w', encoding="utf-8") as f:
-        f.write(html)
-        
-def load(filename):
-    try:
-        with open(path+f"pages/{filename}.html",'r') as f:
-            html = f.read()
-    except Exception as e:
-        print(e)
-        html = "empty"
-    return html
+        return "empty"
 
 def getLastPageNo(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -43,5 +26,5 @@ def getLastPageNo(html):
                 break
         except:
             pass
-    return link.split("page")[-1]
+    return int(link.split("page")[-1])
 

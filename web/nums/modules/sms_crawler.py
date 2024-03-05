@@ -1,17 +1,6 @@
 from . import crawler
 from bs4 import BeautifulSoup
 
-def get(number, url, page="", refresh=False):
-    if refresh:
-        html = crawler.get(url)
-        crawler.write(number+page, html)
-    else:
-        html = crawler.load(number+page)
-    return html
-
-def getLastPageNo(html):
-    no = crawler.getLastPageNo(html)
-    return int(no)
 
 def fetchData(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -44,11 +33,6 @@ def fetchSms(html):
     
     return messages
 
-def getPageNo(main_url, number, page_no, refresh=False):
-    html = get(
-        number = number,
-        url = main_url+"/page"+str(page_no),
-        page = "_"+str(page_no),
-        refresh = refresh
-        )
+def getPageNo(main_url, page_no):
+    html = crawler.get(url = main_url+"/page"+str(page_no))
     return html

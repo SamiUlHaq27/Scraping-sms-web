@@ -6,31 +6,7 @@
 {% load static %}
 <body>
 
-<header class="sticky-top navigation">
-  <div class=container>
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-      <a class=navbar-brand href="index.html"><img class="img-fluid" src={% static "images/logo.png" %} alt="godocs"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-align-right h4 text-dark"></i></button>
-      <div class="collapse navbar-collapse text-center" id=navigation>
-        <ul class="navbar-nav mx-auto align-items-center">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="search.html">Search Page</a></li>
-        </ul>
-        <form class="form-inline search-wrapper d-none d-lg-block" class="search-wrapper" action="search.html">
-          <input id="search-by" name="s" type="search" class="form-control" placeholder="Search here ...">
-          <button class="border-0 bg-white" type="submit"><i class="ti-search"></i></button>
-        </form>
-        <a href="changelog.html" class="btn btn-sm btn-outline-primary ml-lg-4">changelog</a>
-        <a href="contact.html" class="btn btn-sm btn-primary ml-lg-4">contact</a>
-      </div>
-      <form class="form-inline search-wrapper d-block d-lg-none my-3" class="search-wrapper" action="search.html">
-        <input id="search-by" name="s" type="search" class="form-control" placeholder="Search here ...">
-        <button class="border-0 bg-white" type="submit"><i class="ti-search"></i></button>
-      </form>
-    </nav>
-  </div>
-</header>
+{% include "nums/header.html" %}
 
 <!-- details page -->
 <section class="pt-5">
@@ -42,9 +18,16 @@
         <div class="px-lg-5 px-4">
           <div class="content">
             <!-- image -->
-            <p><img src={% static "images/getting-started.jpg" %} alt="image"></p>
+            <p style="justify-content: center;display: flex;"><img height="300px" src="{% static "images/flags/" %}{{number.country_flag}}.svg" alt="image"></p>
             <div style="text-align: center;">
               <h1>{{number.number}}</h1>
+              <script>
+                function copyNum() {
+                  console.log("function run");
+                  navigator.clipboard.writeText("{{number.number}}");
+                }
+                </script>
+              <button class="btn btn-sm btn-primary ml-lg-4" onclick="copyNum()">Copy</button>
               <p>
                 <span>Status </span>
                 <span style="background-color: #FF0043; color: #fff;">{{number.status}}</span>
@@ -99,35 +82,7 @@
 </section>
 <!-- /details page -->
 
-<footer>
-  <div class="container">
-    <div class="row align-items-center border-bottom py-5">
-      <div class="col-lg-4">
-        <ul class="list-inline footer-menu text-center text-lg-left">
-          <li class="list-inline-item"><a href="changelog.html">Changelog</a></li>
-          <li class="list-inline-item"><a href="contact.html">contact</a></li>
-          <li class="list-inline-item"><a href="search.html">Search</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-4 text-center mb-4 mb-lg-0">
-        <a class="navbar-brand" href="index.html">
-          <img class="img-fluid" src={% static "images/logo.png" %} alt="Hugo documentation theme">
-        </a>
-      </div>
-      <div class="col-lg-4">
-        <ul class="list-inline social-icons text-lg-right text-center">
-          <li class="list-inline-item"><a href="#"><i class="ti-facebook"></i></a></li>
-          <li class="list-inline-item"><a href="#"><i class="ti-twitter-alt"></i></a></li>
-          <li class="list-inline-item"><a href="#"><i class="ti-github"></i></a></li>
-          <li class="list-inline-item"><a href="#"><i class="ti-linkedin"></i></a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="py-4 text-center">
-      <small class="text-light">Copyright © 2020 a hugo theme by <a href="https://themefisher.com">themefisher</a></small>
-    </div>
-  </div>
-</footer>
+{% include "nums/footer.html" %}
 
 {% include "nums/scripts.html" %}
 
