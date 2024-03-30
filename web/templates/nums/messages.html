@@ -4,6 +4,7 @@
 
 {% include "nums/head.html" %}
 {% load static %}
+{% load myfilters %}
 <body>
 
 {% include "nums/header.html" %}
@@ -18,6 +19,13 @@
         <div class="px-lg-5 px-4">
           <div class="content">
             <!-- image -->
+            <div> 
+
+              {% comment %} <h4 id="notice">Ad Code here</h4> {% endcomment %}
+                
+   
+                
+             </div>
             <p style="justify-content: center;display: flex;"><img height="300px" src="{% static "images/flags/" %}{{number.country_flag}}.svg" alt="image"></p>
             <div style="text-align: center;">
               <h1>{{number.number}}</h1>
@@ -39,17 +47,31 @@
             <hr>
             <!-- notices -->
             <h4 id="notice">Messages</h4>
+            <div> 
+
+            {% comment %} <h4 id="notice">Ad Code here</h4> {% endcomment %}
+              
+ 
+             
+           </div>
+
             {% for message in messages %}
               <div style="margin-bottom: 10px; border: 2px solid #FF0043; border-radius: 8px; overflow: hidden;">
                 <div style="color: #fff; font-size: larger; background-color: #FF0043;" class="font-weight-medium">
                   <span>{{message.from_sndr}} </span> 
 
-                  <span> | {{message.at_time}}</span>
+                  <span> | {% showTime message.at_time %}</span>
                 </div>
                 <div style="">
                   <p  style="">{{message.text}}</p>
                 </div>
               </div>
+              <script>
+                var v = {{forloop.counter}};
+                if(v > 1 && v%3 == 0){
+                  placeAd();
+                }
+              </script>
             {% endfor %}
         </div>
         <!--Pagination-->

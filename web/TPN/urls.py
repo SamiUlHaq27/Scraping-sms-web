@@ -16,8 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap
+from .views import mysitemap_func
+
+from nums.mysitemaps import CountriesSitemap, NumbersSitemap
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('nums.urls')),
+    path('countries/sitemap.xml', sitemap, {'sitemaps':{"country":CountriesSitemap}}),
+    path('country/<country>/sitemap.xml', mysitemap_func, {'sitemaps':{"numbers":NumbersSitemap}})
 ]
+
+
+handler404 = 'nums.views.error_404_view'

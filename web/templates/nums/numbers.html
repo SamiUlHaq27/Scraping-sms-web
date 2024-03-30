@@ -37,6 +37,12 @@
                   </div>
                 </div>
               </div>
+              <script>
+                var v = {{forloop.counter}};
+                if(v > 1 && v%2 == 0){
+                  placeAd();
+                }
+              </script>
             {% endfor %}
         </div>
         {% include "pagination.html" %}

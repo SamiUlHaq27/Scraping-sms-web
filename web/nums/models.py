@@ -1,11 +1,5 @@
 from django.db import models
-
-# 1 hour ago
-# 2 hours ago
-# 1 min ago
-# 2 mins ago
-# 1 day ago
-# 2 days ago
+from django.urls import reverse
 
 
 class Country(models.Model):
@@ -19,6 +13,9 @@ class Country(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('numbers', args=[self.slug_id])
 
 class Number(models.Model):
     
@@ -35,11 +32,14 @@ class Number(models.Model):
     
     def __str__(self) -> str:
         return self.number
+    
+    def get_absolute_url(self):
+        return reverse("messages", args=[self.country_slug, self.slug_id])
 
 class Message(models.Model):
     
     number = models.CharField(max_length=50)
-    at_time = models.CharField(max_length=20)
+    at_time = models.DateTimeField()
     from_sndr = models.CharField(max_length=20)
     text = models.TextField()
     

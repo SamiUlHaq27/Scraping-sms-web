@@ -29,6 +29,7 @@ def fetchSms(html):
             messages.append(item)
         except Exception as e:
             # print(e)
+            # print(sms)
             pass
     
     return messages

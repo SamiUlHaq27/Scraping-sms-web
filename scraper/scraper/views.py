@@ -1,20 +1,18 @@
 from django.http import HttpResponse
-from selenium import webdriver
+from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
-import time
+from time import sleep
 
 
 def home(request):
     if request.method == "GET":
-        url = request.GET.get("url")
-        print(url)
-    try:
-        opt = Options()
-        brw = webdriver.Chrome(options=opt)
+        opts = Options()
+        brw = Chrome(options=opts)
         brw.implicitly_wait(10)
+        url = request.GET.get("url")
         brw.get(url)
+        # sleep(30)
         html = brw.page_source
-    except Exception as e:
-        print(e)
-        html = "empty"
+        brw.close()
     return HttpResponse(html)
+    

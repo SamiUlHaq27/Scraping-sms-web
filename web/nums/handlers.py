@@ -4,6 +4,7 @@ import json
 from TPN.settings import BASE_DIR
 from .models import Country, Number, Message
 from .sides import slugify
+from .time_mng import getTime
 
 
 class Countries:
@@ -50,8 +51,8 @@ class Numbers:
         
         dif = datetime.datetime.now() - country.updated_at.replace(tzinfo=None)
         time_elapsed = dif.seconds
-        print(time_elapsed)
-        if(time_elapsed < 720):
+        print("Last refresh seconds ago = ",time_elapsed)
+        if(time_elapsed < 7200):
             print("time not come")
             return 1
         
@@ -60,18 +61,22 @@ class Numbers:
             print("empty response")
             return 0
         
-        total_pages = crawler.getLastPageNo(html)
         numbers = numbers_crawler.fetchNumbers(html)
+        Numbers.insert(numbers, country)
         
+        # total_pages = crawler.getLastPageNo(html)
+        # print("Total pages: ",total_pages)
         # for i in range(2, total_pages+1):
         #     try:
-        #         html = numbers_crawler.getPageNo(country.link, country.name, i, refresh=refresh)
+        #         html = numbers_crawler.getPageNo(country.link, i)
         #         if html =="empty":
         #             break
-        #         numbers += numbers_crawler.fetchNumbers(html)
+        #         numbers = numbers_crawler.fetchNumbers(html)
+        #         Numbers.insert(numbers, country)
         #     except Exception as e:
         #         print(e)
         
+    def insert(numbers:Number, country:Country):
         for number in numbers:
             if(Numbers.doesExist(number["number"])):
                 pass
@@ -86,7 +91,6 @@ class Numbers:
                 obj.save()
                 country.numbers += 1
         country.save()
-                
     
     def doesExist(number):
         objs = Number.objects.filter(number=number)
@@ -107,7 +111,6 @@ class Messages:
         html = crawler.get(number.link)
         if html == "empty":
             return 0
-        total_pages = crawler.getLastPageNo(html)
         
         data = sms_crawler.fetchData(html)
         number.active_since = data["since"]
@@ -115,7 +118,10 @@ class Messages:
         number.save()
         
         messages = sms_crawler.fetchSms(html)
+        Messages.insert(messages, number)
         
+        # total_pages = crawler.getLastPageNo(html)
+        # print("Total pages: ",total_pages)
         # for i in range(2, total_pages+1):
         #     try:
         #         html = sms_crawler.getPageNo(number.link, number.number, i, refresh=refresh)
@@ -125,18 +131,23 @@ class Messages:
         #     except Exception as e:
         #         print(e)
         
-        for message in messages:
+    def insert(messages, number:Number):
+        i = len(messages)
+        while(i>=0):
+            i -= 1
+            message = messages[i]
             if Messages.doesExist(message["text"]):
                 pass
             else:
+                # print(getTime(message["time"]))
                 msg = Message()
-                msg.at_time = message["time"]
                 msg.from_sndr = message["from"]
                 msg.text = message["text"]
                 msg.number = number.number
+                msg.at_time = getTime(message["time"])
                 msg.save()
                 number.sms += 1
-                number.save()
+        number.save()
         
     def doesExist(text:str):
         objs = Message.objects.filter(text=text)

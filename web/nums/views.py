@@ -1,13 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Country, Number, Message
 from .handlers import Countries, Numbers, Messages
 import random
 from django.core import paginator
 from .sides import get_pages
-import json
 
-
-
+def get_all_numbers():
+    countries = Country.objects.all().order_by("-id")
+    
+    for country in countries:
+        Numbers.update(country)
 
 def index(request):
     content = {}
@@ -67,7 +69,7 @@ def messages(request, country, number):
         content["pageNo"] = int(request.GET.get('page-no'))
     except:
         content["pageNo"] = 1
-    messages = list(Message.objects.filter(number=number.number))
+    messages = list(Message.objects.filter(number=number.number).order_by("-id"))
     pagination = paginator.Paginator(messages, 20)
     content["messages"] = pagination.get_page(content["pageNo"])
     content["last_page_no"] = pagination.num_pages
@@ -85,3 +87,6 @@ def messages(request, country, number):
 
 def about(request):
     return render(request, "about.html")
+
+def error_404_view(request, exception):
+    return redirect("home")
